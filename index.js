@@ -12,7 +12,7 @@
     if(city){
          try{
             const weatherData = await getWeatherData(city);
-            displayWeatherInf0(weatherData);
+            displayWeatherInfo(weatherData);
 
          }
          catch(error){
@@ -27,10 +27,37 @@
  });
 
  async function getWeatherData(city){
+       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}`;
+
+       const response = await fetch(apiUrl);
+      //  console.log(response);
+
+      if(!response.ok){
+        throw new Error("City not found");
+      }
+         return response.json();
+
 
  }
 
  function displayWeatherInfo(data){
+
+      const{name: city, 
+            main:{temp, humidity}, 
+            weather:[{id, description}]} = data;
+
+      
+         card.textContent = "";
+         card.style.display = "flex";
+
+         const cityDisplay = document.createElement("h1");
+         const tempDisplay = document.createElement("p");
+         const humidityDisplay = document.createElement("p");
+         const descDisplay = document.createElement("p");
+         const weatherEmoji = document.createElement("p");
+
+         cityDisplay.textContent = city;
+         card.appendChild(cityDisplay);
 
  }
 
@@ -49,3 +76,4 @@
      card.appendChild(errorDisplay);
 
  }
+
